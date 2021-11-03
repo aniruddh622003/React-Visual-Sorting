@@ -1,0 +1,13 @@
+.array-bar {
+  width: 2px;
+  height: 30px;
+  display: inline-block;
+  background-color: #2b95ff;
+  margin: 0 1px;
+}
+
+.array-cont {
+  position: absolute;
+  left: 100px;
+  bottom: 100px;
+}
