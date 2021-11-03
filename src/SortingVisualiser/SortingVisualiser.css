@@ -9,5 +9,14 @@
 .array-cont {
   position: absolute;
   left: 100px;
-  bottom: 100px;
+  bottom: 95px;
+}
+.buttons {
+  position: absolute;
+  bottom: 0;
+  height: 100px;
+  display: flex;
+  background: #000;
+  width: 100%;
+  padding: 25px 0px;
 }
