@@ -15,14 +15,15 @@ function SortingVisualiser() {
     resetArray();
   }, []);
 
+  var c_delay = 0;
+  const change_color = (div, height, color) => {
+    setTimeout(() => {
+      div.style.backgroundColor = color;
+      div.style.height = `${height}px`;
+    }, (c_delay += ANIMATION_SPEED_MS));
+  };
+
   function bubbleSort() {
-    var c_delay = 0;
-    const change_color = (div, height, color) => {
-      setTimeout(() => {
-        div.style.backgroundColor = color;
-        div.style.height = `${height}px`;
-      }, (c_delay += ANIMATION_SPEED_MS));
-    };
     const arrayBars = document.getElementsByClassName("array-bar");
     var temparr = array;
     for (let i = 0; i < arrayBars.length; i++) {
@@ -40,6 +41,36 @@ function SortingVisualiser() {
         change_color(arrayBars[j], temparr[j], PRIMARY_COLOR);
         change_color(arrayBars[j + 1], temparr[j + 1], PRIMARY_COLOR);
       }
+    }
+  }
+
+  function selectionSort() {
+    const arrayBars = document.getElementsByClassName("array-bar");
+    var min;
+    var temparr = array;
+    for (let i = 0; i < temparr.length - 1; i++) {
+      change_color(arrayBars[i], temparr[i], CHANGE_COLOR);
+      min = i;
+      for (let j = i + 1; j < temparr.length; j++) {
+        change_color(arrayBars[j], temparr[j], CHECK_COLOR);
+        if (temparr[j] < temparr[min]) {
+          change_color(arrayBars[j], temparr[j], CHANGE_COLOR);
+          if (min !== i)
+            change_color(arrayBars[min], temparr[min], PRIMARY_COLOR);
+
+          min = j;
+        }
+        if (j !== min) {
+          change_color(arrayBars[j], temparr[j], PRIMARY_COLOR);
+        }
+      }
+      var temp = temparr[min];
+      temparr[min] = temparr[i];
+      temparr[i] = temp;
+      change_color(arrayBars[i], temparr[i], CHANGE_COLOR);
+      change_color(arrayBars[min], temparr[min], CHANGE_COLOR);
+      change_color(arrayBars[i], temparr[i], PRIMARY_COLOR);
+      change_color(arrayBars[min], temparr[min], PRIMARY_COLOR);
     }
   }
 
@@ -73,8 +104,9 @@ function SortingVisualiser() {
 
   const resetArray = () => {
     const arr = [];
+    c_delay = 0;
     for (let i = 0; i < (window.innerWidth - 200) / 8; i++) {
-      arr.push(randomIntFromInterval(5, window.innerHeight - 150));
+      arr.push(randomIntFromInterval(50, window.innerHeight - 150));
     }
     setArray(arr);
   };
@@ -94,6 +126,7 @@ function SortingVisualiser() {
         <button onClick={() => resetArray()}>Generate New Array</button>
         <button onClick={() => mergeSort()}>Merge Sort</button>
         <button onClick={() => bubbleSort()}>Bubble Sort</button>
+        <button onClick={() => selectionSort()}>Selection Sort</button>
       </div>
     </>
   );
