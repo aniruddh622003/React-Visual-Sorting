@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { getMergeSortAnimations } from "./algorithms/SortingAlgorithms";
-import { ANIMATION_SPEED_MS, PRIMARY_COLOR, SECONDARY_COLOR } from "./settings";
+import {
+  ANIMATION_SPEED_MS,
+  PRIMARY_COLOR,
+  CHECK_COLOR,
+  CHANGE_COLOR,
+} from "./settings";
 import "./SortingVisualiser.css";
 
 function SortingVisualiser() {
@@ -9,6 +14,34 @@ function SortingVisualiser() {
   useEffect(() => {
     resetArray();
   }, []);
+
+  function bubbleSort() {
+    var c_delay = 0;
+    const change_color = (div, height, color) => {
+      setTimeout(() => {
+        div.style.backgroundColor = color;
+        div.style.height = `${height}px`;
+      }, (c_delay += ANIMATION_SPEED_MS));
+    };
+    const arrayBars = document.getElementsByClassName("array-bar");
+    var temparr = array;
+    for (let i = 0; i < arrayBars.length; i++) {
+      for (let j = 0; j < arrayBars.length - i - 1; j++) {
+        change_color(arrayBars[j], temparr[j], CHECK_COLOR);
+        change_color(arrayBars[j + 1], temparr[j + 1], CHECK_COLOR);
+        var temp;
+        if (temparr[j] > temparr[j + 1]) {
+          temp = temparr[j];
+          temparr[j] = temparr[j + 1];
+          temparr[j + 1] = temp;
+          change_color(arrayBars[j], temparr[j], CHANGE_COLOR);
+          change_color(arrayBars[j + 1], temparr[j + 1], CHANGE_COLOR);
+        }
+        change_color(arrayBars[j], temparr[j], PRIMARY_COLOR);
+        change_color(arrayBars[j + 1], temparr[j + 1], PRIMARY_COLOR);
+      }
+    }
+  }
 
   function mergeSort() {
     const animations = getMergeSortAnimations(array);
@@ -19,7 +52,7 @@ function SortingVisualiser() {
         const [barOneIdx, barTwoIdx] = animations[i];
         const barOneStyle = arrayBars[barOneIdx].style;
         const barTwoStyle = arrayBars[barTwoIdx].style;
-        const color = i % 3 === 0 ? SECONDARY_COLOR : PRIMARY_COLOR;
+        const color = i % 3 === 0 ? CHECK_COLOR : PRIMARY_COLOR;
         setTimeout(() => {
           barOneStyle.backgroundColor = color;
           barTwoStyle.backgroundColor = color;
@@ -40,7 +73,7 @@ function SortingVisualiser() {
 
   const resetArray = () => {
     const arr = [];
-    for (let i = 0; i < (window.innerWidth - 200) / 4; i++) {
+    for (let i = 0; i < (window.innerWidth - 200) / 8; i++) {
       arr.push(randomIntFromInterval(5, window.innerHeight - 150));
     }
     setArray(arr);
@@ -60,6 +93,7 @@ function SortingVisualiser() {
       <div className="buttons">
         <button onClick={() => resetArray()}>Generate New Array</button>
         <button onClick={() => mergeSort()}>Merge Sort</button>
+        <button onClick={() => bubbleSort()}>Bubble Sort</button>
       </div>
     </>
   );
